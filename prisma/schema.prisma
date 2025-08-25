@@ -7,10 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ALUNO
+  PROFESSOR
+}
+
 model Usuario {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   nome      String
-  email     String   @unique
+  email     String     @unique
   senha     String
-  criadoEm  DateTime @default(now())
+  role      Role       @default(ALUNO)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  perguntas Pergunta[]
+}
+
+model Pergunta {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  descricao String
+  createdAt DateTime @default(now())
+
+  // relação com usuário que fez a pergunta
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
 }
