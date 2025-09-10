@@ -21,6 +21,7 @@ model Usuario {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   perguntas Pergunta[]
+  respostas Resposta[] // nova relação
 }
 
 model Pergunta {
@@ -29,7 +30,20 @@ model Pergunta {
   descricao String
   createdAt DateTime @default(now())
 
-  // relação com usuário que fez a pergunta
   usuario   Usuario @relation(fields: [usuarioId], references: [id])
   usuarioId Int
+
+  respostas Resposta[] // nova relação
+}
+
+model Resposta {
+  id         Int      @id @default(autoincrement())
+  texto      String
+  createdAt  DateTime @default(now())
+
+  usuario    Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId  Int
+
+  pergunta   Pergunta @relation(fields: [perguntaId], references: [id])
+  perguntaId Int
 }
